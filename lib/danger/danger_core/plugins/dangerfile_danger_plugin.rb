@@ -82,7 +82,8 @@ module Danger
         import_dangerfile_from_github(opts)
       elsif opts.kind_of?(Hash)
         if opts.key?(:github)
-          import_dangerfile_from_github(opts[:github], opts[:branch], opts[:path])
+          warn "Use `ref` instead of `branch` in `danger.import_dangerfile`." if opts.key?(:branch)
+          import_dangerfile_from_github(opts[:github], opts[:ref] || opts[:branch], opts[:path])
         elsif opts.key?(:gitlab)
           import_dangerfile_from_gitlab(opts[:gitlab], opts[:branch], opts[:path])
         elsif opts.key?(:path)
@@ -162,10 +163,10 @@ module Danger
     #           The path at the repo where Dangerfile is.
     # @return   [void]
     #
-    def import_dangerfile_from_github(slug, branch = nil, path = nil)
+    def import_dangerfile_from_github(slug, ref = nil, path = nil)
       raise "`import_dangerfile_from_github` requires a string" unless slug.kind_of?(String)
       org, repo = slug.split("/")
-      download_url = env.request_source.file_url(organisation: org, repository: repo, branch: branch, path: path || "Dangerfile")
+      download_url = env.request_source.file_url(organisation: org, repository: repo, ref: ref, path: path || "Dangerfile")
       local_path = download(download_url)
       @dangerfile.parse(Pathname.new(local_path))
     end

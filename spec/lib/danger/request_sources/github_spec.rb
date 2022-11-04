@@ -164,7 +164,7 @@ RSpec.describe Danger::RequestSources::GitHub, host: :github do
       end
 
       it "returns a valid URL with more parameters" do
-        url = @g.file_url(repository: "danger", organisation: "artsy", branch: "master", path: "path/Dangerfile")
+        url = @g.file_url(repository: "danger", organisation: "artsy", ref: "master", path: "path/Dangerfile")
         expect(url).to eq("https://raw.githubusercontent.com/artsy/danger/master/path/Dangerfile")
       end
 

@@ -473,17 +473,17 @@ module Danger
       end
 
       # @return [String] A URL to the specific file, ready to be downloaded
-      def file_url(organisation: nil, repository: nil, branch: nil, path: nil)
+      def file_url(organisation: nil, repository: nil, ref: nil, path: nil)
         organisation ||= self.organisation
 
         begin
           # Retrieve the download URL (default branch on nil param)
-          contents = client.contents("#{organisation}/#{repository}", path: path, ref: branch)
+          contents = client.contents("#{organisation}/#{repository}", path: path, ref: ref)
           @download_url = contents["download_url"]
         rescue Octokit::ClientError
           # Fallback to github.com
-          branch ||= "master"
-          @download_url = "https://raw.githubusercontent.com/#{organisation}/#{repository}/#{branch}/#{path}"
+          ref ||= "master"
+          @download_url = "https://raw.githubusercontent.com/#{organisation}/#{repository}/#{ref}/#{path}"
         end
       end
 

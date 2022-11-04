@@ -88,6 +88,15 @@ RSpec.describe Danger::Dangerfile::DSL, host: :github do
       outer_dangerfile = "danger.import_dangerfile(github: 'example/example', branch: 'custom-branch', path: 'path/to/Dangerfile')"
 
       dm.parse(Pathname.new("."), outer_dangerfile)
+      expect(dm.status_report[:warnings]).to eq(["Use `ref` instead of `branch` in `danger.import_dangerfile`."])
+      expect(dm.status_report[:messages]).to eq(["OK"])
+    end
+
+    it "github: 'repo/name', ref: 'custom-branch', path: 'path/to/Dangerfile'" do
+      outer_dangerfile = "danger.import_dangerfile(github: 'example/example', ref: 'custom-branch', path: 'path/to/Dangerfile')"
+
+      dm.parse(Pathname.new("."), outer_dangerfile)
+      expect(dm.status_report[:warnings]).to eq([])
       expect(dm.status_report[:messages]).to eq(["OK"])
     end
 
